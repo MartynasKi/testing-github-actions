@@ -1,0 +1,21 @@
+name: Auto PR to production
+on:
+    push:
+        branches: ["master"]
+
+jobs:
+    pull-request:
+        name: Open PR to production
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - uses: actions/checkout@v3
+              name: checkout
+
+            - uses: repo-sync/pull-request@v2
+              name: pull-request
+              with:
+                  destination_branch: "production"
+                  pr_title: "Pulling ${{ github.ref_name }} => production"
+                  pr_body: "*An automated PR*:\nfrom ${{ github.ref_name }} => production"
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
